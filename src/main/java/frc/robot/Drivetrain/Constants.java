@@ -12,10 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 
 public class Constants {
-    public static final int LeftFrontMotorID = 11;
-    public static final int LeftBackMotorID = 12;
-    public static final int RightFrontMotorID = 13;
-    public static final int RightBackMotorID = 14;
+    public static final int MotorID[] = {11, 12, 13, 14};
 
     // 待修正
     public static final double GearRatio = 10.71;
@@ -26,10 +23,10 @@ public class Constants {
 
     // 待修正
     public static final MecanumDriveKinematics kinematics = new MecanumDriveKinematics(
-        new Translation2d(0.28, 0.28),
-        new Translation2d(0.28, -0.28),
-        new Translation2d(-0.28, 0.28),
-        new Translation2d(-0.28, -0.28)
+        new Translation2d(-0.285, 0.26),
+        new Translation2d(-0.285, -0.26),
+        new Translation2d(0.285, 0.26),
+        new Translation2d(0.285, -0.26)
     );
 
     public static final double SpeedLimiter = 1.5;

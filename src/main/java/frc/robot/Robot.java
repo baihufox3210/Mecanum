@@ -19,18 +19,15 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     robotContainer = new RobotContainer();
+  }
 
+  public void robotInit() {
     drivetrain = Drivetrain.getInstance();
-
     joystick = new Joystick(0);
   }
 
   @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-
-    drivetrain.drive(-joystick.getY(), joystick.getX(), joystick.getZ());
-  }
+  public void robotPeriodic() {}
 
   @Override
   public void disabledInit() {}
@@ -64,7 +61,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    drivetrain.drive(joystick.getY(), joystick.getX(), joystick.getZ());
+  }
 
   @Override
   public void teleopExit() {}

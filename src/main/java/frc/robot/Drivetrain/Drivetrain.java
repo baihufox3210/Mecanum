@@ -1,11 +1,5 @@
 package frc.robot.Drivetrain;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
@@ -15,9 +9,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Drivetrain {
-    public SparkMax LeftFrontMotor, LeftBackMotor, RightFrontMotor, RightBackMotor;
-    public RelativeEncoder LeftFrontEncoder, LeftBackEncoder, RightFrontEncoder, RightBackEncoder;
-    public SparkMaxConfig LeftFrontConfig, LeftBackConfig, RightFrontConfig, RightBackConfig;
+    public MecanumModule driveMotor[] = new MecanumModule[4];
     
     private final SlewRateLimiter xLimiter = new SlewRateLimiter(Constants.SpeedLimiter);
     private final SlewRateLimiter yLimiter = new SlewRateLimiter(Constants.SpeedLimiter);
@@ -31,16 +23,8 @@ public class Drivetrain {
     private MecanumDrive mecanumDrive;
 
     private Drivetrain() {
-        LeftFrontMotor = new SparkMax(Constants.LeftFrontMotorID, MotorType.kBrushless);
-        LeftBackMotor = new SparkMax(Constants.LeftBackMotorID, MotorType.kBrushless);
-        RightFrontMotor = new SparkMax(Constants.RightFrontMotorID, MotorType.kBrushless);
-        RightBackMotor = new SparkMax(Constants.RightBackMotorID, MotorType.kBrushless);
-
-        LeftFrontEncoder = LeftFrontMotor.getEncoder();
-        LeftBackEncoder = LeftBackMotor.getEncoder();
-        RightFrontEncoder = RightFrontMotor.getEncoder();
-        RightBackEncoder = RightBackMotor.getEncoder();
-
+        for (int i = 0; i < 4; i++) driveMotor[i] = new MecanumModule(Constants.MotorID[i], i < 2);
+        
         gyro = new AHRS(NavXComType.kMXP_SPI);
 
         PoseEstimator = 
@@ -51,85 +35,12 @@ public class Drivetrain {
                 Constants.InitialPose
             );
 
-        LeftFrontConfig = new SparkMaxConfig();
-        LeftBackConfig = new SparkMaxConfig();
-        RightFrontConfig = new SparkMaxConfig();
-        RightBackConfig = new SparkMaxConfig();
-
-        LeftFrontConfig.idleMode(Constants.MotorMode)
-            .inverted(true)
-            .voltageCompensation(12)
-            .smartCurrentLimit(44);
-
-        LeftFrontConfig.encoder
-            .positionConversionFactor(Constants.PositionConversionFactor)
-            .velocityConversionFactor(Constants.VelocityConversionFactor);
-
-        LeftBackConfig.idleMode(Constants.MotorMode)
-            .inverted(true)
-            .voltageCompensation(12)
-            .smartCurrentLimit(44);
-
-        LeftBackConfig.encoder
-            .positionConversionFactor(Constants.PositionConversionFactor)
-            .velocityConversionFactor(Constants.VelocityConversionFactor);
-
-        RightFrontConfig.idleMode(Constants.MotorMode)
-            .inverted(false)
-            .voltageCompensation(12)
-            .smartCurrentLimit(44);
-        
-        RightFrontConfig.encoder
-            .positionConversionFactor(Constants.PositionConversionFactor)
-            .velocityConversionFactor(Constants.VelocityConversionFactor);
-
-        RightBackConfig.idleMode(Constants.MotorMode)
-            .inverted(false)
-            .voltageCompensation(12)
-            .smartCurrentLimit(44);
-
-        RightBackConfig.encoder
-            .positionConversionFactor(Constants.PositionConversionFactor)
-            .velocityConversionFactor(Constants.VelocityConversionFactor);
-
-        LeftFrontMotor.configure(
-            LeftFrontConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters
-        );
-
-        LeftBackMotor.configure(
-            LeftBackConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters
-        );
-
-        RightFrontMotor.configure(
-            RightFrontConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters
-        );
-
-        RightBackMotor.configure(
-            RightBackConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters
-        );
-
         mecanumDrive = new MecanumDrive(
-            LeftFrontMotor,
-            LeftBackMotor,
-            RightFrontMotor,
-            RightBackMotor
+            driveMotor[0].getMotor(),
+            driveMotor[1].getMotor(),
+            driveMotor[2].getMotor(),
+            driveMotor[3].getMotor()
         );
-    }
-
-    private double getCurrentX() {
-        return PoseEstimator.getEstimatedPosition().getX();
-    }
-
-    private double getCurrentY() {
-        return PoseEstimator.getEstimatedPosition().getY();
     }
 
     public void drive(double xSpeed, double ySpeed, double zRotation) {
@@ -141,13 +52,6 @@ public class Drivetrain {
         );
     }
 
-    public void drivePID(double targetX, double targetY, double targetTheta) {
-        double vx = Constants.xPID.calculate(getCurrentX(), targetX);
-        double vy = Constants.yPID.calculate(getCurrentY(), targetY);
-        double omega = Constants.zPID.calculate(gyro.getRotation2d().getDegrees(), targetTheta);
-        drive(vx, vy, omega);
-    }
-
     public void turnAngle(double angle) {
         double currentAngle = gyro.getRotation2d().getDegrees();
         drive(0.0, 0.0, Constants.turnPID.calculate(currentAngle, angle));
@@ -155,10 +59,11 @@ public class Drivetrain {
 
     public MecanumDriveWheelPositions getPosition() {
         return new MecanumDriveWheelPositions(
-            LeftFrontEncoder.getPosition(),
-            LeftBackEncoder.getPosition(),
-            RightFrontEncoder.getPosition(),
-            RightBackEncoder.getPosition()
+            driveMotor[0].getPosition(),
+            driveMotor[1].getPosition(),
+            driveMotor[2].getPosition(),
+            driveMotor[3].getPosition()
+
         );
     }
 
