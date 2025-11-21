@@ -14,14 +14,12 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 public class Constants {
     public static final int MotorID[] = {11, 12, 13, 14};
 
-    // 待修正
     public static final double GearRatio = 10.71;
     public static final double WheelCirc = Inches.of(6).times(Math.PI).in(Meters);
 
     public static final double PositionConversionFactor = 1 / GearRatio * WheelCirc;
     public static final double VelocityConversionFactor = PositionConversionFactor / 60;
 
-    // 待修正
     public static final MecanumDriveKinematics kinematics = new MecanumDriveKinematics(
         new Translation2d(-0.285, 0.26),
         new Translation2d(-0.285, -0.26),
