@@ -1,4 +1,4 @@
-package frc.robot.Drivetrain;
+package frc.robot.Subsystems.Drivetrain;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -23,7 +23,7 @@ public class Drivetrain {
     private MecanumDrive mecanumDrive;
 
     private Drivetrain() {
-        for (int i = 0; i < 4; i++) driveMotor[i] = new MecanumModule(Constants.MotorID[i], i < 2);
+        for (int i = 0; i < 4; i++) driveMotor[i] = new MecanumModule(Constants.MotorID[i], i > 1);
         
         gyro = new AHRS(NavXComType.kMXP_SPI);
 

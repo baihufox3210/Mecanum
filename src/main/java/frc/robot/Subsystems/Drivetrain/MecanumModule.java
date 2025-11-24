@@ -1,4 +1,4 @@
-package frc.robot.Drivetrain;
+package frc.robot.Subsystems.Drivetrain;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
