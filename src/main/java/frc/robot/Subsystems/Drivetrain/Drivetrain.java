@@ -30,7 +30,7 @@ public class Drivetrain {
         PoseEstimator = 
             new MecanumDrivePoseEstimator(
                 Constants.kinematics,
-                gyro.getRotation2d(),
+                gyro.getRotation2d().unaryMinus(),
                 getPosition(),
                 Constants.InitialPose
             );
@@ -48,13 +48,8 @@ public class Drivetrain {
             xLimiter.calculate(xSpeed),
             yLimiter.calculate(ySpeed),
             zLimiter.calculate(zRotation),
-            gyro.getRotation2d()
+            gyro.getRotation2d().unaryMinus()
         );
-    }
-
-    public void turnAngle(double angle) {
-        double currentAngle = gyro.getRotation2d().getDegrees();
-        drive(0.0, 0.0, Constants.turnPID.calculate(currentAngle, angle));
     }
 
     public MecanumDriveWheelPositions getPosition() {
@@ -63,7 +58,6 @@ public class Drivetrain {
             driveMotor[1].getPosition(),
             driveMotor[2].getPosition(),
             driveMotor[3].getPosition()
-
         );
     }
 
