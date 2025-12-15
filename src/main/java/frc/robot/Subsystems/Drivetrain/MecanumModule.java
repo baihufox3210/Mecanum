@@ -37,6 +37,10 @@ public class MecanumModule {
         return driveEncoder.getPosition();
     }
 
+    public double getVelocity() {
+        return driveEncoder.getVelocity();
+    }
+
     public SparkMax getMotor() {
         return driveMotor;
     }
