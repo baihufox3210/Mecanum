@@ -1,29 +1,24 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Subsystems.Drivetrain.Drivetrain;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
   private final RobotContainer robotContainer;
-
-  private Drivetrain drivetrain;
-  private Joystick joystick;
 
   public Robot() {
     robotContainer = new RobotContainer();
   }
 
   public void robotInit() {
-    drivetrain = Drivetrain.getInstance();
-    joystick = new Joystick(0);
   }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   @Override
   public void disabledInit() {}
@@ -57,21 +52,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-    drivetrain.drive(-joystick.getY() * .5, joystick.getX() * .5, joystick.getZ() * .5);
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void teleopExit() {}
-
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
-
-  @Override
-  public void testPeriodic() {}
-
-  @Override
-  public void testExit() {}
 }

@@ -13,9 +13,10 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Gyro.Gyro;
 
-public class Drivetrain {
+public class Drivetrain extends SubsystemBase {
     public MecanumModule driveMotor[] = new MecanumModule[4];
     
     private final SlewRateLimiter xLimiter = new SlewRateLimiter(Constants.SpeedLimiter);
@@ -31,7 +32,7 @@ public class Drivetrain {
 
     private RobotConfig config;
 
-    private Drivetrain() {
+    public Drivetrain() {
         gyro.reset();
 
         try {
@@ -70,7 +71,8 @@ public class Drivetrain {
                 var alliance = DriverStation.getAlliance();
                 if (alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
                 return false;
-            }
+            },
+            this
         );
     }
 
