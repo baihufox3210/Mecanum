@@ -42,13 +42,12 @@ public class Drivetrain extends SubsystemBase {
 
         for (int i = 0; i < 4; i++) driveMotor[i] = new MecanumModule(Constants.MotorID[i], i > 1);
         
-        PoseEstimator = 
-            new MecanumDrivePoseEstimator(
-                Constants.kinematics,
-                gyro.getRotation(),
-                getPosition(),
-                Constants.InitialPose   
-            );
+        PoseEstimator = new MecanumDrivePoseEstimator(
+            Constants.kinematics,
+            gyro.getRotation(),
+            getPosition(),
+            Constants.InitialPose
+        );
 
         mecanumDrive = new MecanumDrive(
             driveMotor[0].getMotor(),
