@@ -125,4 +125,12 @@ public class Drivetrain extends SubsystemBase {
         if(drivetrain == null) drivetrain = new Drivetrain();
         return drivetrain;
     }
+
+    @Override
+    public void periodic() {
+        PoseEstimator.update(
+            gyro.getRotation(),
+            getPosition()
+        );
+    }
 }
