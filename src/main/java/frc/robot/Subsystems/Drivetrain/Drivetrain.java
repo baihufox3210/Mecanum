@@ -97,8 +97,8 @@ public class Drivetrain extends SubsystemBase {
     public MecanumDriveWheelPositions getPosition() {
         return new MecanumDriveWheelPositions(
             driveMotor[0].getPosition(),
-            driveMotor[1].getPosition(),
             driveMotor[2].getPosition(),
+            driveMotor[1].getPosition(),
             driveMotor[3].getPosition()
         );
     }
@@ -106,8 +106,8 @@ public class Drivetrain extends SubsystemBase {
     public ChassisSpeeds getChassisSpeeds() {
         MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds(
             driveMotor[0].getVelocity(),
-            driveMotor[1].getVelocity(),
             driveMotor[2].getVelocity(),
+            driveMotor[1].getVelocity(),
             driveMotor[3].getVelocity()
         );
 

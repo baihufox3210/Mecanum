@@ -22,8 +22,8 @@ public class Constants {
 
     public static final MecanumDriveKinematics kinematics = new MecanumDriveKinematics(
         new Translation2d(0.285, 0.26),
-        new Translation2d(-0.285, 0.26),
         new Translation2d(0.285, -0.26),
+        new Translation2d(-0.285, 0.26),
         new Translation2d(-0.285, -0.26)
     );
 
